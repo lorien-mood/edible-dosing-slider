@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edible Dosing Guide | Mood</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #F4F1EC;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    * { box-sizing: border-box; }
+
+    .widget-wrapper {
+      width: 100%;
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .widget-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid rgba(27,58,47,0.08);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(27,58,47,0.06), 0 1px 4px rgba(27,58,47,0.04);
+    }
+
+    .widget-header {
+      padding: 28px 28px 0;
+      text-align: center;
+    }
+
+    .widget-header h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      color: #1B3A2F;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .widget-header p {
+      color: #7A8B82;
+      font-size: 13px;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .slider-section {
+      padding: 28px 28px 8px;
+    }
+
+    .dose-display {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .dose-number {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1;
+      margin: 0;
+      color: #1B3A2F;
+      transition: color 0.3s ease;
+    }
+
+    .dose-unit {
+      color: #7A8B82;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .slider-track-container {
+      position: relative;
+      padding: 0 4px;
+      margin-bottom: 12px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #C8DDD4 0%, #1B3A2F 40%, #D4A04A 70%, #C2553A 100%);
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(27,58,47,0.25), 0 0 0 3px rgba(27,58,47,0.15);
+      cursor: grab;
+      transition: box-shadow 0.2s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      box-shadow: 0 2px 12px rgba(27,58,47,0.35), 0 0 0 5px rgba(27,58,47,0.2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: none;
+      box-shadow: 0 2px 8px rgba(27,58,47,0.25), 0 0 0 3px rgba(27,58,47,0.15);
+      cursor: grab;
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2px;
+    }
+
+    .slider-labels span {
+      color: #A0ADA6;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .info-card {
+      margin: 20px 28px 28px;
+      background: #F8F6F2;
+      border: 1px solid rgba(27,58,47,0.06);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .info-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .info-title {
+      color: #1B3A2F;
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+
+    .info-who {
+      color: #7A8B82;
+      font-size: 13px;
+      margin: 0 0 10px;
+      font-weight: 500;
+    }
+
+    .info-effects {
+      color: #4A5D53;
+      font-size: 14px;
+      line-height: 1.55;
+      margin: 0 0 14px;
+    }
+
+    .info-timeline {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-item {
+      flex: 1;
+      min-width: 100px;
+      background: #FFFFFF;
+      border: 1px solid rgba(27,58,47,0.06);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .timeline-label {
+      color: #A0ADA6;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-value {
+      color: #1B3A2F;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .intensity-bar-container {
+      margin-top: 14px;
+    }
+
+    .intensity-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .intensity-label span {
+      color: #A0ADA6;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .intensity-level {
+      font-size: 12px;
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+
+    .intensity-track {
+      height: 6px;
+      background: rgba(27,58,47,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .intensity-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease;
+    }
+
+    @media (max-width: 420px) {
+      .widget-header h2 { font-size: 19px; }
+      .dose-number { font-size: 44px; }
+      .info-timeline { gap: 8px; }
+      .timeline-item { padding: 10px 8px; min-width: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="widget-wrapper">
+    <div class="widget-card">
+      <div class="widget-header">
+        <h2>Edible Dosing Guide</h2>
+        <p>Drag the slider to explore effects at each level</p>
+      </div>
+
+      <div class="slider-section">
+        <div class="dose-display">
+          <div class="dose-number" id="doseNumber">5</div>
+          <div class="dose-unit">mg THC</div>
+        </div>
+
+        <div class="slider-track-container">
+          <input type="range" id="doseSlider" min="2" max="100" value="5" step="1">
+        </div>
+        <div class="slider-labels">
+          <span>2.5mg</span>
+          <span>25mg</span>
+          <span>50mg</span>
+          <span>100mg</span>
+        </div>
+      </div>
+
+      <div class="info-card" id="infoCard">
+        <div class="info-badge" id="infoBadge">Beginner</div>
+        <h3 class="info-title" id="infoTitle">Entry-Level Experience</h3>
+        <p class="info-who" id="infoWho">Best for: Beginners &amp; low-tolerance users</p>
+        <p class="info-effects" id="infoEffects">Light mood elevation, gentle body relaxation, and subtle shifts in perception. Ideal for daytime use or those new to edible cannabis.</p>
+
+        <div class="info-timeline" id="infoTimeline">
+          <div class="timeline-item">
+            <div class="timeline-label">Onset</div>
+            <div class="timeline-value" id="tlOnset">45–90 min</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-label">Peak</div>
+            <div class="timeline-value" id="tlPeak">2–3 hrs</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-label">Duration</div>
+            <div class="timeline-value" id="tlDuration">3–5 hrs</div>
+          </div>
+        </div>
+
+        <div class="intensity-bar-container">
+          <div class="intensity-label">
+            <span>Intensity</span>
+            <span class="intensity-level" id="intensityLevel">Mild</span>
+          </div>
+          <div class="intensity-track">
+            <div class="intensity-fill" id="intensityFill" style="width: 15%; background: #1B3A2F;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const doses = [
+      {
+        min: 2, max: 5,
+        badge: "Beginner", badgeColor: "#1B3A2F", badgeBg: "rgba(27,58,47,0.08)",
+        title: "Entry-Level Experience",
+        who: "Best for: Beginners & low-tolerance users",
+        effects: "Light mood elevation, gentle body relaxation, and subtle shifts in perception. Ideal for daytime use or those new to edible cannabis.",
+        onset: "45–90 min", peak: "2–3 hrs", duration: "3–5 hrs",
+        intensity: 15, intLabel: "Mild", intColor: "#1B3A2F",
+        numberColor: "#1B3A2F"
+      },
+      {
+        min: 6, max: 10,
+        badge: "Casual", badgeColor: "#2A5C47", badgeBg: "rgba(42,92,71,0.08)",
+        title: "Casual Consumption",
+        who: "Best for: Occasional users seeking moderate effects",
+        effects: "Noticeable euphoria, heightened senses, and moderate body relaxation. May cause mild impairment depending on physiology and setting.",
+        onset: "30–90 min", peak: "2–3 hrs", duration: "4–6 hrs",
+        intensity: 30, intLabel: "Moderate", intColor: "#2A5C47",
+        numberColor: "#2A5C47"
+      },
+      {
+        min: 11, max: 20,
+        badge: "Regular", badgeColor: "#7A6832", badgeBg: "rgba(212,160,74,0.1)",
+        title: "Confident Regulars",
+        who: "Best for: Regular consumers with moderate tolerance",
+        effects: "Stronger intoxicating effects including euphoria, deep relaxation, and possible couchlock. Best suited for evenings or weekends.",
+        onset: "30–60 min", peak: "2–4 hrs", duration: "5–8 hrs",
+        intensity: 50, intLabel: "Strong", intColor: "#D4A04A",
+        numberColor: "#7A6832"
+      },
+      {
+        min: 21, max: 30,
+        badge: "Experienced", badgeColor: "#A66B2E", badgeBg: "rgba(166,107,46,0.1)",
+        title: "Experienced Users",
+        who: "Best for: Seasoned edible fans seeking powerful results",
+        effects: "Heavy effects on both body and mind. Excellent for immersive experiences, though likely to impair coordination and cognition for hours.",
+        onset: "30–60 min", peak: "2–4 hrs", duration: "6–10 hrs",
+        intensity: 70, intLabel: "Very Strong", intColor: "#A66B2E",
+        numberColor: "#A66B2E"
+      },
+      {
+        min: 31, max: 50,
+        badge: "Advanced", badgeColor: "#C2553A", badgeBg: "rgba(194,85,58,0.1)",
+        title: "Advanced Territory",
+        who: "Best for: Veteran users with very built-up tolerance",
+        effects: "Significantly impaired coordination, altered time perception, and an extended, intense experience. Overconsumption risk is substantial at this level.",
+        onset: "30–90 min", peak: "3–5 hrs", duration: "8–12 hrs",
+        intensity: 85, intLabel: "Extreme", intColor: "#C2553A",
+        numberColor: "#C2553A"
+      },
+      {
+        min: 51, max: 100,
+        badge: "\u26A0 Caution", badgeColor: "#A63030", badgeBg: "rgba(166,48,48,0.1)",
+        title: "Overconsumption Zone",
+        who: "Not recommended for most consumers",
+        effects: "Overwhelming intoxication, extreme sedation, disorientation, and significant adverse effects for most people. Even veteran users may find this amount far too intense. This range carries serious overconsumption risk.",
+        onset: "30–90 min", peak: "3–5 hrs", duration: "8–12+ hrs",
+        intensity: 100, intLabel: "Dangerous", intColor: "#A63030",
+        numberColor: "#A63030"
+      }
+    ];
+
+    const slider = document.getElementById("doseSlider");
+    const doseNumber = document.getElementById("doseNumber");
+    const infoBadge = document.getElementById("infoBadge");
+    const infoTitle = document.getElementById("infoTitle");
+    const infoWho = document.getElementById("infoWho");
+    const infoEffects = document.getElementById("infoEffects");
+    const tlOnset = document.getElementById("tlOnset");
+    const tlPeak = document.getElementById("tlPeak");
+    const tlDuration = document.getElementById("tlDuration");
+    const intensityFill = document.getElementById("intensityFill");
+    const intensityLevel = document.getElementById("intensityLevel");
+
+    function getDoseInfo(val) {
+      for (let d of doses) {
+        if (val >= d.min && val <= d.max) return d;
+      }
+      return doses[doses.length - 1];
+    }
+
+    function updateDisplay() {
+      const val = parseInt(slider.value);
+      const d = getDoseInfo(val);
+
+      doseNumber.textContent = val;
+      doseNumber.style.color = d.numberColor;
+
+      infoBadge.textContent = d.badge;
+      infoBadge.style.color = d.badgeColor;
+      infoBadge.style.background = d.badgeBg;
+      infoTitle.textContent = d.title;
+      infoWho.textContent = d.who;
+      infoEffects.textContent = d.effects;
+      tlOnset.textContent = d.onset;
+      tlPeak.textContent = d.peak;
+      tlDuration.textContent = d.duration;
+      intensityFill.style.width = d.intensity + "%";
+      intensityFill.style.background = d.intColor;
+      intensityLevel.textContent = d.intLabel;
+      intensityLevel.style.color = d.intColor;
+    }
+
+    slider.addEventListener("input", updateDisplay);
+    updateDisplay();
+  </script>
+</body>
+</html>
